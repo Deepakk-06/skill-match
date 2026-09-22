@@ -1,4 +1,4 @@
-# SKILL-MATCH
+# BRANCHLESS
 
 ### Your branch shouldn't decide what you're capable of.
 
@@ -6,11 +6,11 @@
 
 ## 📸 Preview
 
-![Skill-Match Preview](ss1.png)
+![Branchless Preview](ss1.png)
 
 ## 🚀 Live Demo
 
-[Try Skill-Match](https://skill-match-sand.vercel.app)
+[Try Branchless](https://skill-match-sand.vercel.app)
 
 ## 💡 The Idea
 
@@ -20,35 +20,35 @@ Traditional eligibility:
 Degree → Branch → Eligibility → Rejection
 ```
 
-Skill-Match:
+Branchless:
 
 ```text
 Skills → Evidence → Match → Opportunity
 ```
 
-Skill-Match evaluates candidates based on the skills they can demonstrate rather than relying solely on degree-branch filters.
+Branchless evaluates candidates based on the skills they can demonstrate rather than relying solely on degree-branch filters.
 
 ## 🔥 Evidence-Based Skills
 
-| Level | Meaning |
-|---|---|
+| Level       | Meaning                                            |
+| ----------- | -------------------------------------------------- |
 | 🟢 VERIFIED | Skill is supported by actual project/code evidence |
-| 🟡 CLAIMED | Student claims the skill |
-| 🟠 LISTED | Skill only appears on the resume |
-| ⚫ MISSING | No evidence found |
+| 🟡 CLAIMED  | Student claims the skill                           |
+| 🟠 LISTED   | Skill only appears on the resume                   |
+| ⚫ MISSING   | No evidence found                                  |
 
 ### The score comes from evidence. Not vibes.
 
 ## ⚙️ Current Prototype
 
-- Job description skill extraction
-- Resume analysis
-- GitHub / portfolio proof
-- Branch-based vs Skills-only eligibility
-- Candidate scoring
-- Verified / Claimed / Listed / Missing evidence
-- CSV export
-- Human-in-the-loop decision support
+* Job description skill extraction
+* Resume analysis
+* GitHub / portfolio proof
+* Branch-based vs Skills-only eligibility
+* Candidate scoring
+* Verified / Claimed / Listed / Missing evidence
+* CSV export
+* Human-in-the-loop decision support
 
 ## 🧠 Core Principle
 
@@ -60,6 +60,27 @@ Humans make the final decision.
 
 ---
 
+## ⚠️ Developer's Disclaimer
+
+This started as a random idea born entirely out of frustration.
+
+I had no real plan for how far it would go.
+I just had the idea and kept pushing it further.
+
+Somehow, it turned into this.
+
+**How?**
+
+Honestly, God knows.
+
+I have no idea what possessed me to keep going, but here we are.
+
+It works. That's all I'm saying.
+
+**Please don't ask too many questions. I genuinely don't know either. 💀**
+
+---
+
 ### Made by a student, for students.
 
-**Skill-Match — because your branch is only one line on your resume.**
+**Branchless — because your branch is only one line on your resume.**
