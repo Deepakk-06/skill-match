@@ -10,7 +10,7 @@
 
 ## 🚀 Live Demo
 
-[Try Branchless](https://skill-match-sand.vercel.app)
+[Try Branchless](https://branchlesss.vercel.app)
 
 ## 💡 The Idea
 
