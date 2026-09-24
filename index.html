@@ -3,7 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>branchless</title>
+<title>branchless: skills decide, branches don't</title>
+<meta name="description" content="Rank students by the skills they can prove, not by their branch. Paste a job description, add a resume, see who qualifies.">
+<meta property="og:title" content="branchless: skills decide, branches don't">
+<meta property="og:description" content="Rank students by the skills they can prove, not by their branch.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%231F3FBF'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -77,7 +82,7 @@ textarea{resize:vertical}
 .chip.p{background:var(--okbg); color:var(--ok); border-color:transparent; font-weight:600}
 .chip.c{background:transparent; color:var(--ok); border:1px solid var(--ok); font-weight:600}
 .chip.l{border:1px dashed var(--muted); color:var(--muted); background:transparent}
-.chip.m{color:var(--muted); opacity:.55; background:transparent}
+.chip.m{color:var(--muted); opacity:.8; background:transparent}
 .chip .star{all:unset; cursor:pointer; color:var(--muted); font-size:.9rem; line-height:1; padding:0 .1rem; border-radius:4px}
 .chip .star[aria-pressed="true"]{color:var(--brand)}
 .chip .star:focus-visible{outline:2px solid var(--hot)}
@@ -118,6 +123,8 @@ body[data-mode="skills"] #allowedWrap{display:none}
 .summary{font-family:var(--display); font-weight:700; font-size:1.05rem; line-height:1.3; letter-spacing:-.015em; margin:.9rem 0 .4rem; min-height:2.8em}
 .legend{display:flex; flex-wrap:wrap; gap:.4rem .9rem; align-items:center; font-size:.8rem; color:var(--muted); margin-bottom:.9rem}
 .legend .chip{font-size:.72rem}
+.excl{display:none}
+.compare{font-weight:600;margin:0 0 .8rem;padding:.5rem .8rem;border-radius:10px;background:var(--okbg);color:var(--ok)}
 .banner{display:flex; flex-wrap:wrap; align-items:center; gap:.6rem; background:var(--hotbg); color:var(--hot); border-radius:10px; padding:.5rem .8rem; font-size:.88rem; font-weight:600; margin-bottom:.8rem}
 
 /* rows */
@@ -140,7 +147,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
 .bar{display:block; height:6px; border-radius:99px; background:var(--line); margin-top:.35rem; overflow:hidden}
 .bar i{display:block; height:100%; background:var(--brand); border-radius:99px; transition:width .6s cubic-bezier(.2,.8,.2,1)}
 .row .chips{grid-area:chips; transition:opacity .4s, filter .4s}
-.row.locked .who,.row.locked .score,.row.locked .chips{opacity:.5}
+.row.locked .who,.row.locked .score,.row.locked .chips{opacity:.75}
 .row.locked .chips{filter:grayscale(1)}
 .row.locked .bar i{background:var(--muted)}
 .flag{grid-area:flag; display:none}
@@ -163,17 +170,18 @@ body[data-mode="skills"] #allowedWrap{display:none}
 @keyframes shine{to{background-position:-220% 0}}
 .foot .spark{display:inline-block; margin-left:.3rem; animation:spark 1.4s ease-in-out infinite}
 @keyframes spark{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}50%{transform:translateY(-3px) rotate(18deg) scale(1.25)}}
+.mark .shine{font-weight:700; background:linear-gradient(90deg,var(--ink) 0%,var(--brand) 25%,var(--ink) 50%); background-size:220% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shine 2.6s linear infinite}
 @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
 @media (max-width:520px){ .detail{padding-left:.9rem} }
 </style>
 </head>
 <body data-mode="branch">
 <header class="hero">
-  <div class="top"><div class="mark">branchless</div><div class="skins" role="group" aria-label="Theme">
+  <div class="top"><div class="mark"><span class="shine">branchless</span></div><div class="skins" role="group" aria-label="Theme">
     <button type="button" data-skin="paper">Paper</button><button type="button" data-skin="ink">Ink</button><button type="button" data-skin="pop">Pop</button>
   </div></div>
   <h1>Skills decide.<br><span class="g">Branches don't.</span></h1>
-  <p><span>Paste a job description and drop in a resume. See who qualifies, and the project that proves it.</span></p>
+  <p><span>Paste a job description and drop in a resume. See who qualifies, and the project that proves it.</span><span style="margin-top:.6rem">This demo shows both sides: the company sets skills (step 1), a student applies (step 2), and step 3 shows who qualifies. Submit sends nothing.</span></p>
 </header>
 <section class="story" aria-labelledby="why-h"><div class="panel">
   <h2 id="why-h">Why branchless exists</h2>
@@ -188,7 +196,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
       <div class="presets" id="presets"></div>
       <textarea id="jd" aria-label="Job description text" spellcheck="false"></textarea>
       <div class="found">
-        <h3>Skills the role asks for</h3>
+        <h3>Skills the role asks for</h3><p class="tiny" id="reqHint">Pick a preset, or type the skills the role needs.</p><p class="tiny">★ must-have (needed to qualify) · ☆ nice to have (adds to the score)</p>
         <div class="chips" id="req"></div>
         <div class="addrow">
           <input type="text" id="reqAdd" placeholder="Add a skill, press Enter" maxlength="30" aria-label="Add a required skill">
@@ -196,7 +204,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
         <div class="btnrow">
           <button type="button" class="btn ghost" id="extract">Read skills from the text</button>
         </div>
-        <p class="tiny" id="reqHint">Pick a preset, or type the skills the role needs. Star a skill to make it a must-have.</p>
+        
       </div>
     </section>
 
@@ -212,18 +220,19 @@ body[data-mode="skills"] #allowedWrap{display:none}
       <textarea id="paste" aria-label="Resume text" spellcheck="false" placeholder="Paste resume text here"></textarea>
       <div class="btnrow"><button type="button" class="btn" id="checkPaste">Check my fit</button></div>
       <div class="status" id="status" aria-live="polite"></div>
-      <p class="tiny" id="privacy">Resume text goes to Claude on your account for the check. Nothing is saved.</p>
+      <p class="tiny" id="privacy">Keyword matching runs in your browser. If you add a GitHub name, only that public name is sent to GitHub. No resume data is saved (only your theme choice is remembered).</p>
     </section>
   </div>
 
   <section class="panel" aria-labelledby="res-h">
     <h2 id="res-h">3. Who is eligible</h2>
+    <div class="compare" id="compare" aria-live="polite"></div>
     <div class="control">
       <div class="seg" role="group" aria-label="Eligibility mode">
         <button type="button" id="mBranch" aria-pressed="true">Branch rules</button>
         <button type="button" id="mSkills" aria-pressed="false">Skills only</button>
       </div>
-      <label class="allowed" id="allowedWrap">Allowed <input type="text" id="allowed" value="CSE, IT, AI&amp;DS" aria-label="Allowed branches, comma separated" title="Codes: CSE, IT, AI&amp;DS, ECE, EEE, ME, CIVIL"></label>
+      <label class="allowed" id="allowedWrap">Allowed branches <input type="text" id="allowed" value="CSE, IT, AI&amp;DS" aria-label="Allowed branches, comma separated" title="Codes: CSE, IT, AI&amp;DS, ECE, EEE, ME, CIVIL"></label>
       <label class="allowed" id="minWrap">Min score <input type="text" id="minScore" inputmode="numeric" maxlength="3" value="40" style="width:4rem" aria-label="Minimum score for Skills only" title="Skills only needs this score and every starred must-have"></label>
       <label class="samples"><input type="checkbox" id="incSamples" checked> Sample students</label>
     </div>
@@ -238,9 +247,10 @@ body[data-mode="skills"] #allowedWrap{display:none}
     </div>
     <div class="list" id="list"></div>
     <div class="btnrow"><button type="button" class="btn ghost" id="export">Export CSV</button></div>
-    <p class="note">Verified counts 100%, claimed 60%, listed only 30%. Skills only needs the minimum score and every starred must-have (at least claimed). Scores support a human decision; they never reject anyone. Submit is a demo and sends nothing.</p>
+    <p class="note">Verified counts 100%, claimed 60%, listed only 30%. Skills only needs the minimum score and every starred must-have (at least claimed). Scores support a human decision; they never reject anyone. Code proof reads dependency files and repo languages, not README text. Submit is a demo and sends nothing.</p>
   </section>
 </main>
+<section class="story"><details class="panel"><summary style="cursor:pointer;font-weight:600">How scoring works, and its limits</summary><p style="margin-top:.7rem">Scores come from keyword matching, so a skill pasted into a resume can be gamed. That is why "listed only" counts for just 30%. "Verified" needs both a project and public code, but it is still a signal, not proof of quality.</p><p>Automated ranking of candidates gets regulatory scrutiny in some places. Use these scores to prioritise a human review, never to reject anyone on their own.</p></details></section>
 
 <footer class="foot">Made by <span class="who-me">Deepak K</span><span class="spark" aria-hidden="true">✨</span> &middot; <a href="https://github.com/Deepakk-06" target="_blank" rel="noopener noreferrer">GitHub</a></footer>
 
@@ -395,16 +405,19 @@ body[data-mode="skills"] #allowedWrap{display:none}
     /* summary */
     var canApply = res.filter(function(r){ return r.ok; }).length;
     var excluded = res.filter(function(r){ return !r.bOk && r.bar; }).length;
+    var cmp = $("compare");
+    cmp.textContent = (res.length && required.length) ? "Branch rules allow "+res.filter(function(r){ return r.bOk; }).length+" of "+res.length+". Skills only allows "+res.filter(function(r){ return r.bar; }).length+" of "+res.length+"." : "";
+    cmp.hidden = !cmp.textContent;
     if(!res.length){ summaryEl.textContent = "Add a resume or turn on sample students."; }
     else if(!required.length){ summaryEl.textContent = "Add the skills the role needs to rank people."; }
     else if(mode==="branch"){
       var top = res.slice().sort(function(a,b){ return b.score-a.score; })[0];
       var first1 = top.p.name.split(" ")[0];
       summaryEl.textContent = top.ok
-        ? canApply+" of "+res.length+" can apply. "+first1+" leads."
-        : canApply+" of "+res.length+" can apply. The top match, "+first1+" ("+top.p.branch+"), is locked out.";
+        ? first1+" leads."
+        : "The top match, "+first1+" ("+top.p.branch+"), is locked out.";
     } else {
-      summaryEl.textContent = canApply+" of "+res.length+" meet the skill bar, ranked by skills they can prove.";
+      summaryEl.textContent = "Ranked by what each person can prove.";
     }
     exclEl.textContent = (res.length && required.length)
       ? excluded+(excluded===1?" student is":" students are")+" excluded by branch rules but meet the skill bar."
@@ -432,10 +445,10 @@ body[data-mode="skills"] #allowedWrap{display:none}
         + (p.portfolio ? (p.ghUser?' &middot; ':'')+'<a href="'+esc(p.portfolio)+'" target="_blank" rel="noopener noreferrer">Portfolio</a> (shown to the company, not scored)' : '');
       var linkLine = links ? '<p class="gap">'+links+'</p>' : '';
       var action;
-      if(locked && mode==="branch") action = '<p>Branch rules block this application.</p><button type="button" class="btn ghost" data-mode="skills">See it in Skills only</button>';
+      if(locked && mode==="branch") action = '<p>'+(p.branch==="UNKNOWN"?"No branch was found on this resume, so branch rules block it.":"Branch rules block this application.")+'</p><button type="button" class="btn ghost" data-mode="skills">See it in Skills only</button>';
       else if(locked) action = '<p>Below the skill bar: needs a score of '+minScore()+' and every must-have. A person makes the final call.</p>';
       else if(submitted[p.id]) action = '<p class="sent">Marked as submitted. Nothing was sent; this is a demo.</p>';
-      else action = '<p>Auto-submits in <span class="cd">'+fmt(deadline-Date.now())+'</span> unless you send it now.</p><button type="button" class="btn" data-submit="'+esc(p.id)+'">Submit now</button>';
+      else action = '<p>Demo only: this marks it as submitted and sends nothing.</p><button type="button" class="btn" data-submit="'+esc(p.id)+'">Submit now (demo)</button>';
       var rm = p.type==="resume" ? ' <button type="button" class="btn ghost" data-remove="'+esc(p.id)+'">Remove resume</button>' : '';
       var tag = p.type==="sample" ? "sample" : (r.stale ? "resume, out of date" : "resume");
 
@@ -443,7 +456,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
       el.innerHTML =
         '<button type="button" class="head" aria-expanded="'+(opened[p.id]?"true":"false")+'">'+
           '<span class="rank">'+(i+1)+'</span>'+
-          '<span class="who"><b>'+esc(p.name)+'</b><small>'+esc(p.branch)+' &middot; '+r.n.verified+' verified, '+r.n.claimed+' claimed, '+r.n.listed+' listed only &middot; '+tag+'</small></span>'+
+          '<span class="who"><b>'+esc(p.name)+'</b><small>'+(mode==="skills"?"":esc(p.branch)+' &middot; ')+r.n.verified+' verified, '+r.n.claimed+' claimed, '+r.n.listed+' listed only &middot; '+tag+'</small></span>'+
           '<span class="score" role="img" aria-label="Score '+r.score+' out of 100"><b>'+r.score+'</b><span class="bar"><i style="width:'+r.score+'%"></i></span></span>'+
           '<span class="chips">'+chips+'</span>'+
           '<span class="flag">'+LOCK+(mode==="branch" ? "Blocked by branch rule" : "Below the skill bar")+'</span>'+
@@ -475,7 +488,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
     var lines = [head.map(csvCell).join(",")];
     lastRes.forEach(function(r,i){
       function ks(t){ return r.items.filter(function(x){ return x.t===t; }).map(function(x){ return x.k; }).join("; "); }
-      lines.push([i+1, r.p.name, r.p.branch, r.score, r.mustN ? r.mustMet+"/"+r.mustN : "none set", r.bOk?"yes":"no", r.bar?"yes":"no", ks("verified"), ks("claimed"), ks("listed"), ks("missing"), r.p.ghUser?"https://github.com/"+r.p.ghUser:"", r.p.portfolio||""].map(csvCell).join(","));
+      lines.push([i+1, r.p.name, mode==="skills"?"hidden":r.p.branch, r.score, r.mustN ? r.mustMet+"/"+r.mustN : "none set", mode==="skills"?"":(r.bOk?"yes":"no"), r.bar?"yes":"no", ks("verified"), ks("claimed"), ks("listed"), ks("missing"), r.p.ghUser?"https://github.com/"+r.p.ghUser:"", r.p.portfolio||""].map(csvCell).join(","));
     });
     try{
       var blob = new Blob(["\ufeff"+lines.join("\r\n")], {type:"text/csv;charset=utf-8"});
@@ -599,8 +612,8 @@ body[data-mode="skills"] #allowedWrap{display:none}
       if(!Array.isArray(list)) throw 0;
       var picks = list.filter(function(r){ return !r.fork; }).slice(0,8);
       return await Promise.all(picks.map(async function(r){
-        var out={name:r.name, url:"https://github.com/"+user+"/"+r.name, text:(r.description||"")+" "+(r.topics||[]).join(" ")+" "+(r.language||"")};
-        await Promise.all(["README.md","requirements.txt","package.xml","CMakeLists.txt","platformio.ini","package.json"].map(async function(f){
+        var out={name:r.name, url:"https://github.com/"+user+"/"+r.name, text:(r.language||"")};
+        await Promise.all(["requirements.txt","package.xml","CMakeLists.txt","platformio.ini","package.json"].map(async function(f){
           try{ var x=await fetch(raw+user+"/"+r.name+"/HEAD/"+f,{signal:signal}); if(x.ok) out.text+=" "+(await x.text()).slice(0,3000); }catch(e){ if(e&&e.name==="AbortError") throw e; }
         }));
         return out;
@@ -782,14 +795,14 @@ body[data-mode="skills"] #allowedWrap{display:none}
   jd.value = PRESETS[0].text; setPreset(0); render();
 
   /* Provider: keyword matching by default (works offline, sends nothing). Uses Claude when this page runs where it is available. */
-  var MOCK_PRIVACY = "Keyword matching runs in your browser. If you add a GitHub name, only that public name is sent to GitHub. Nothing is saved.";
-  var CLAUDE_PRIVACY = "Resume text goes to Claude on your account for the check. Nothing is saved.";
+  var MOCK_PRIVACY = "Keyword matching runs in your browser. If you add a GitHub name, only that public name is sent to GitHub. No resume data is saved (only your theme choice is remembered).";
+  var CLAUDE_PRIVACY = "Resume text goes to Claude on your account for the check. No resume data is saved (only your theme choice is remembered).";
   privacyEl.textContent = MOCK_PRIVACY;
   if(window.claude && typeof window.claude.use==="function"){
     window.claude.use("sample").then(function(s){
       if(!s) return;
       sample = s; privacyEl.textContent = CLAUDE_PRIVACY;
-      reqHint.textContent = "Pick a preset, or paste your own job text and read the skills from it. Star a skill to make it a must-have.";
+      reqHint.textContent = "Pick a preset, or paste your own job text and read the skills from it.";
       render();
     }, function(){});
   }
