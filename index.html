@@ -120,8 +120,8 @@ body[data-mode="skills"] #allowedWrap{display:none}
 .list{display:flex; flex-direction:column; gap:.55rem}
 .row{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--surface); will-change:transform; transition:border-color .15s}
 .row:hover{border-color:var(--brand)}
-.list .row:first-child:not(.locked){border-color:var(--brand); box-shadow:0 0 0 1px var(--brand)}
-.list .row:first-child:not(.locked) .rank{color:var(--brand)}
+.list .row:first-child{border-color:var(--brand); box-shadow:0 0 0 1px var(--brand)}
+.list .row:first-child .rank{color:var(--brand)}
 .row.locked{background:var(--field)}
 .head{all:unset; box-sizing:border-box; display:grid; width:100%; cursor:pointer; padding:.85rem .9rem; gap:.35rem .8rem;
   grid-template-columns:2rem minmax(0,1fr) auto; grid-template-areas:"rank who score" ". chips chips" ". flag flag"; border-radius:var(--r)}
@@ -256,7 +256,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
     </div>
     <div class="list" id="list"></div>
     <div class="btnrow"><button type="button" class="btn ghost" id="export">Export CSV</button></div>
-    <p class="note">Verified counts 100%, claimed 60%, listed only 30%. Skills only needs the minimum score and every starred must-have (at least claimed). Scores support a human decision; they never reject anyone. Code proof reads dependency files and repo languages, not README text. Submit is a demo and sends nothing.</p>
+    <p class="note">Ranked by score, everyone in one list — a locked row can still outrank an eligible one, on purpose: that's the point being made. Verified counts 100%, claimed 60%, listed only 30%. Skills only needs the minimum score and every starred must-have (at least claimed). Scores support a human decision; they never reject anyone. Code proof reads dependency files and repo languages, not README text. Submit is a demo and sends nothing.</p>
   </section>
 </main>
 <section class="story"><details class="panel"><summary style="cursor:pointer;font-weight:600">How scoring works, and its limits</summary><p style="margin-top:.7rem">Scores come from keyword matching, so a skill pasted into a resume can be gamed. That is why "listed only" counts for just 30%. "Verified" needs both a project and public code, but it is still a signal, not proof of quality.</p><p>Automated ranking of candidates gets regulatory scrutiny in some places. Use these scores to prioritise a human review, never to reject anyone on their own.</p><p>Everything here — the skill matching and the scoring — runs as plain JavaScript in your browser. There's no paid API, no account, and no server involved, so it costs nothing to run and nothing is sent anywhere except a GitHub username, if you choose to add one.</p></details></section>
@@ -272,7 +272,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
     </div>
     <div>
       <p class="cg-title">Score streaks</p>
-      <p class="cg-sub">Top 5 in the current ranking, counting up live.</p>
+      <p class="cg-sub">Top 5 by score overall, locked or not, counting up live.</p>
       <div class="cg-streak" id="cgStreaks"></div>
     </div>
     <div>
@@ -317,26 +317,11 @@ body[data-mode="skills"] #allowedWrap{display:none}
       {name:"FreeRTOS sensor hub",skills:["RTOS","STM32","Embedded C"]}]},
     {id:"s3",type:"sample",name:"Divya Nair",branch:"AI&DS",listed:["Git","Linux"],repos:["OpenCV","Python"],projects:[
       {name:"Face mask detector",skills:["OpenCV","Python","PyTorch","YOLO"]}]},
-    {id:"s4",type:"sample",name:"Sneha Pillai",branch:"ME",listed:["Git","Linux"],repos:[],projects:[
-      {name:"Pick-and-place cell",skills:["ROS 2","Python","YOLO"]}]},
-    {id:"s5",type:"sample",name:"Ananya Varma",branch:"IT",listed:["Git","REST APIs","TypeScript"],repos:["React","Node.js"],projects:[
-      {name:"Realtime chat app",skills:["React","Node.js","SQL","Docker"]},
-      {name:"Resume parser",skills:["Python","PyTorch"]}]},
-    {id:"s6",type:"sample",name:"Rohan Deshmukh",branch:"CSE",listed:["Python","Docker"],repos:["Node.js","SQL"],projects:[
-      {name:"Todo app",skills:["React","Node.js","TypeScript"]},
-      {name:"Blog API",skills:["Node.js","SQL","REST APIs","Git"]}]},
-    {id:"s7",type:"sample",name:"Vikram Trivedi",branch:"CSE",listed:["Python","C++","OpenCV","Git"],repos:["React"],projects:[
-      {name:"Portfolio site",skills:["React","TypeScript"]}]},
-    {id:"s8",type:"sample",name:"Priya Iyer",branch:"ECE",listed:["Git","SQL"],repos:["Python","PyTorch","NumPy","scikit-learn"],projects:[
-      {name:"Sensor anomaly detection",skills:["Python","PyTorch","NumPy","Pandas"]},
-      {name:"Signal classifier",skills:["scikit-learn","Python","NumPy"]}]},
-    {id:"s9",type:"sample",name:"Arjun Kulkarni",branch:"CSE",listed:["Python","Pandas","TensorFlow","Git","SQL","Docker"],repos:["SQL"],projects:[
-      {name:"Library management system",skills:["SQL","Python"]}]},
+    {id:"s11",type:"sample",name:"Rahul Menon",branch:"CSE",listed:["Python","Kubernetes"],repos:["Docker","Git","AWS"],projects:[
+      {name:"CI pipeline for a class project",skills:["Docker","AWS","Git","Linux","CI/CD"]}]},
     {id:"s10",type:"sample",name:"Zoya Sheikh",branch:"ME",listed:["MATLAB","Python"],repos:[],projects:[
       {name:"Gearbox design",skills:["SolidWorks","ANSYS","MATLAB"]},
-      {name:"Chassis FEA study",skills:["ANSYS","SolidWorks","AutoCAD"]}]},
-    {id:"s11",type:"sample",name:"Rahul Menon",branch:"CSE",listed:["Python","Kubernetes"],repos:["Docker","Git","AWS"],projects:[
-      {name:"CI pipeline for a class project",skills:["Docker","AWS","Git","Linux","CI/CD"]}]}
+      {name:"Chassis FEA study",skills:["ANSYS","SolidWorks","AutoCAD"]}]}
   ];
 
   var required = PRESETS[0].req.slice();
@@ -414,8 +399,11 @@ body[data-mode="skills"] #allowedWrap{display:none}
       e.ok = (mode==="skills") ? e.bar : e.bOk;
       e.stale = p.type==="resume" && p.reqKey!==reqKey(); return e;
     });
+    // Rank everyone on the same ladder, by score alone. Whether a person is
+    // locked out is shown as a flag on their row, not by moving them down
+    // the list — that's the whole point: a locked row can still outrank an
+    // eligible one, and the rank number should say so honestly.
     res.sort(function(a,b){
-      if(a.ok!==b.ok) return a.ok ? -1 : 1;
       return (b.score-a.score) || (b.n.verified-a.n.verified) || a.p.name.localeCompare(b.p.name);
     });
     lastRes = res;
@@ -430,7 +418,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
     if(!res.length){ summaryEl.textContent = "Add a resume or turn on sample students."; }
     else if(!required.length){ summaryEl.textContent = "Add the skills the role needs to rank people."; }
     else if(mode==="branch"){
-      var top = res.slice().sort(function(a,b){ return b.score-a.score; })[0];
+      var top = res[0];
       var first1 = top.p.name.split(" ")[0];
       summaryEl.textContent = top.ok ? first1+" leads." : "The top match, "+first1+" ("+top.p.branch+"), is locked out.";
     } else {
@@ -462,7 +450,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
         + (p.portfolio ? (p.ghUser?' &middot; ':'')+'<a href="'+esc(p.portfolio)+'" target="_blank" rel="noopener noreferrer">Portfolio</a> (shown to the company, not scored)' : '');
       var linkLine = links ? '<p class="gap">'+links+'</p>' : '';
       var action;
-      if(locked && mode==="branch") action = '<p>'+(p.branch==="UNKNOWN"?"No branch was found on this resume, so branch rules block it.":"Branch rules block this application.")+'</p><button type="button" class="btn ghost" data-mode="skills">See it in Skills only</button>';
+      if(locked && mode==="branch") action = '<p>'+(p.branch==="UNKNOWN"?"No branch was found on this resume, so branch rules block it.":"Branch rules block this application, despite ranking #"+(i+1)+" by score.")+'</p><button type="button" class="btn ghost" data-mode="skills">See it in Skills only</button>';
       else if(locked) action = '<p>Below the skill bar: needs a score of '+minScore()+' and every must-have. A person makes the final call.</p>';
       else if(submitted[p.id]) action = '<p class="sent">Marked as submitted. Nothing was sent; this is a demo.</p>';
       else action = '<p>Demo only: this marks it as submitted and sends nothing.</p><button type="button" class="btn" data-submit="'+esc(p.id)+'">Submit now (demo)</button>';
@@ -503,7 +491,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
 
   function renderProofCalendar(res){
     var elCal = $("cgCalendar"), elTitle = $("cgCalTitle");
-    var top = res.filter(function(r){ return r.ok; })[0] || res[0];
+    var top = res[0];
     if(!top || !required.length){
       elCal.innerHTML = '<p class="tiny">Add skills and at least one candidate to see this.</p>';
       elTitle.textContent = "Skill proof calendar"; return;
