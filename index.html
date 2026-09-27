@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-skin="paper">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -15,26 +15,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root{
-  --bg:#F4EFE6; --surface:#FFFCF5; --ink:#1B1A17; --muted:#6B655A; --line:#D8D0BF;
-  --brand:#1F3FBF; --brand-ink:#FFFFFF; --hot:#B93A0B; --hotbg:#FBE3D3;
-  --ok:#1F7A4D; --okbg:#DDEFD9; --field:#EFE8DA; --mk:#FFE066; --gc:var(--ink);
+  --bg:#EFEFE6; --surface:#FFFFFF; --ink:#0A0A0A; --muted:#3A3A3A; --line:#0A0A0A;
+  --brand:#2547FF; --brand-ink:#FFFFFF; --hot:#D92E12; --hotbg:#FFD9CF;
+  --ok:#0B6B2A; --okbg:#CDF5D3; --field:#F2F2E9; --mk:#B9C6FF; --gc:var(--ink);
   --display:"Fraunces",Georgia,"Times New Roman",serif;
   --body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --r:12px; --pill:999px; --bw:1px; --shadow:none;
-  color-scheme:light dark; box-sizing:border-box;
+  --r:8px; --pill:999px; --bw:3px; --shadow:7px 7px 0 var(--ink); --bs:3px 3px 0 var(--ink); --bb:var(--ink);
+  color-scheme:light; box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-:root[data-skin="ink"]{
-  --bg:#121210; --surface:#1B1B18; --ink:#F3F0E6; --muted:#A8A292; --line:#35342E;
-  --brand:#FFD84D; --brand-ink:#161512; --hot:#FF8F63; --hotbg:#35190E;
-  --ok:#86DB95; --okbg:#17331D; --field:#161614; --mk:transparent; --gc:var(--brand); color-scheme:dark;
-}
-:root[data-skin="pop"]{
-  --bg:#EFEFE6; --surface:#FFFFFF; --ink:#0A0A0A; --muted:#555555; --line:#0A0A0A;
-  --brand:#C6F135; --brand-ink:#0A0A0A; --hot:#D92E12; --hotbg:#FFD9CF;
-  --ok:#0B6B2A; --okbg:#CDF5D3; --field:#F7F7F1; --mk:#C6F135; --gc:var(--ink);
-  --r:8px; --bw:2px; --shadow:4px 4px 0 var(--ink); --bs:2px 2px 0 var(--ink); --bb:var(--ink); color-scheme:light;
-}
+/* Every border goes thick and black, nothing gets to look faint */
+.chip{border-width:2px; border-color:var(--ink); font-weight:700}
+.chip.p,.chip.c{border-width:2px; border-color:var(--ink)}
+.chip.l{border-width:2px; border-style:dashed; border-color:var(--ink)}
+.pill{border-width:2px; border-color:var(--ink); font-weight:700}
+textarea,input[type="text"]{border-width:2px; border-color:var(--ink)}
+.drop{border-width:3px; border-color:var(--ink)}
+.bar{border:2px solid var(--ink)}
+.row{border-width:3px}
+.list .row:first-child{box-shadow:0 0 0 3px var(--brand)}
+.seg{border-width:2px; border-color:var(--ink)}
 html{scroll-padding-top:env(safe-area-inset-top,0px); background:var(--bg);}
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;}
@@ -43,15 +43,12 @@ button{cursor:pointer}
 :focus-visible{outline:3px solid var(--hot); outline-offset:2px}
 [hidden]{display:none !important}
 .hero{padding:1.4rem clamp(1rem,4vw,3rem) 1.8rem}
-.skins{display:flex; flex-wrap:wrap; gap:.3rem}
-.skins button{border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:var(--pill); padding:.25rem .7rem; font-size:.8rem}
-.skins button[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
-.top{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; max-width:1180px; margin:0 auto 2.2rem;}
+.top{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem; max-width:1180px; margin:0 auto 2.2rem; position:relative; z-index:2}
 .mark{font-family:var(--display); font-weight:700; font-size:1.05rem; letter-spacing:-.02em;}
 .mark::before{content:""; display:inline-block; width:.8rem; height:.8rem; margin-right:.5rem; background:var(--brand); border:1px solid var(--ink); border-radius:var(--r)}
-.hero h1{font-family:var(--display); font-weight:800; font-size:clamp(2.2rem,6.6vw,4.6rem); line-height:1.04; letter-spacing:-.03em; margin:0 auto; max-width:1180px;}
+.hero h1{font-family:var(--display); font-weight:800; font-size:clamp(2.2rem,6.6vw,4.6rem); line-height:1.04; letter-spacing:-.03em; margin:0 auto; max-width:1180px; position:relative; z-index:2}
 .hero h1 .g{background:linear-gradient(transparent 58%, var(--mk) 58%); color:var(--gc); padding:0 .12em; margin:0 -.12em}
-.hero p{max-width:1180px; margin:1.3rem auto 0; font-size:1.1rem;}
+.hero p{max-width:1180px; margin:1.3rem auto 0; font-size:1.1rem; position:relative; z-index:2}
 .hero p span{display:block; max-width:36rem; color:var(--muted)}
 .story{max-width:1180px; margin:0 auto; padding:0 clamp(1rem,4vw,3rem) 1.25rem}
 .story .panel{border-left:4px solid var(--brand)}
@@ -60,7 +57,7 @@ button{cursor:pointer}
 .bench{max-width:1180px; margin:0 auto; padding:0 clamp(1rem,4vw,3rem) 4rem; display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:1.25rem; align-items:start;}
 @media (max-width:900px){ .bench{grid-template-columns:1fr} }
 .col{display:grid; gap:1.25rem}
-.panel{background:var(--surface); border:var(--bw) solid var(--line); border-radius:var(--r); padding:1.25rem; box-shadow:var(--shadow);}
+.panel{background:var(--surface); border:var(--bw) solid var(--line); border-radius:var(--r); padding:1.25rem; box-shadow:var(--shadow); transform-style:preserve-3d; transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease; will-change:transform;}
 .panel h2{font-family:var(--display); font-weight:700; font-size:1.05rem; letter-spacing:-.02em; margin:0 0 .75rem;}
 .presets{display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:.75rem}
 .pill{border:1px solid var(--line); background:var(--field); border-radius:var(--pill); padding:.3rem .8rem; font-size:.85rem;}
@@ -117,10 +114,11 @@ body[data-mode="skills"] #allowedWrap{display:none}
 .legend .chip{font-size:.72rem}
 .compare{font-weight:600;margin:0 0 .8rem;padding:.5rem .8rem;border-radius:10px;background:var(--okbg);color:var(--ok)}
 .banner{display:flex; flex-wrap:wrap; align-items:center; gap:.6rem; background:var(--hotbg); color:var(--hot); border-radius:10px; padding:.5rem .8rem; font-size:.88rem; font-weight:600; margin-bottom:.8rem}
-.list{display:flex; flex-direction:column; gap:.55rem}
-.row{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--surface); will-change:transform; transition:border-color .15s}
-.row:hover{border-color:var(--brand)}
+.list{display:flex; flex-direction:column; gap:.55rem; perspective:1400px}
+.row{border:var(--bw) solid var(--line); border-radius:var(--r); background:var(--surface); will-change:transform; transition:border-color .15s, transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease; transform-style:preserve-3d;}
+.row:hover{border-color:var(--brand); transform:translateZ(10px) scale(1.008); box-shadow:0 14px 28px -14px rgba(0,0,0,.35)}
 .list .row:first-child{border-color:var(--brand); box-shadow:0 0 0 1px var(--brand)}
+.list .row:first-child:hover{box-shadow:0 0 0 1px var(--brand),0 14px 28px -14px rgba(0,0,0,.35)}
 .list .row:first-child .rank{color:var(--brand)}
 .row.locked{background:var(--field)}
 .head{all:unset; box-sizing:border-box; display:grid; width:100%; cursor:pointer; padding:.85rem .9rem; gap:.35rem .8rem;
@@ -162,34 +160,11 @@ body[data-mode="skills"] #allowedWrap{display:none}
 @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
 @media (max-width:520px){ .detail{padding-left:.9rem} }
 
-/* GitHub-contribution-style widgets */
-.cg-section{margin-top:1.6rem; display:grid; gap:1.4rem}
-.cg-title{font-size:.9rem; font-weight:600; margin:0 0 .15rem}
-.cg-sub{font-size:.8rem; color:var(--muted); margin:0 0 .7rem}
-.cg-row{display:flex; gap:4px; flex-wrap:wrap}
-.cg-cell{width:16px; height:16px; border-radius:4px; background:var(--field); border:1px solid var(--line); opacity:0; transform:scale(.4); animation:cgIn .4s ease forwards}
-@keyframes cgIn{ to{ opacity:var(--end-op,1); transform:scale(1); } }
-.cg-cell.on{background:var(--brand); border-color:transparent}
-.cg-legend{font-size:.72rem; color:var(--muted); display:flex; align-items:center; gap:4px; margin-top:.5rem; flex-wrap:wrap}
-.cg-legend .cg-cell{width:11px; height:11px; animation:none; opacity:var(--end-op,1); transform:none}
-.cg-streak{display:flex; flex-direction:column; gap:.55rem}
-.cg-srow{display:flex; align-items:center; gap:.7rem}
-.cg-sname{width:112px; flex-shrink:0; font-size:.85rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.cg-sbar{flex:1; height:10px; background:var(--field); border:1px solid var(--line); border-radius:99px; overflow:hidden}
-.cg-sbar i{display:block; height:100%; width:0; background:var(--brand); border-radius:99px; transition:width 1s cubic-bezier(.2,.8,.2,1)}
-.cg-sval{width:2.6rem; text-align:right; font-weight:700; font-variant-numeric:tabular-nums; font-size:.92rem}
-.cg-heat{display:grid; grid-template-columns:112px repeat(7,minmax(0,1fr)); gap:4px; font-size:.66rem}
-.cg-heat .hh{color:var(--muted); text-align:center; padding-bottom:3px; white-space:nowrap; overflow:hidden}
-.cg-heat .hr{color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; align-self:center; padding-right:.4rem}
-.cg-heat .hc{aspect-ratio:1; border-radius:4px; background:var(--field); border:1px solid var(--line); opacity:0; transform:scale(.4); animation:cgIn .35s ease forwards}
-.cg-heat .hc.on{background:var(--brand); border-color:transparent; --end-op:1}
 </style>
 </head>
 <body data-mode="branch">
 <header class="hero">
-  <div class="top"><div class="mark"><span class="shine">branchless</span></div><div class="skins" role="group" aria-label="Theme">
-    <button type="button" data-skin="paper">Paper</button><button type="button" data-skin="ink">Ink</button><button type="button" data-skin="pop">Pop</button>
-  </div></div>
+  <div class="top"><div class="mark"><span class="shine">branchless</span></div></div>
   <h1>Skills decide.<br><span class="g">Branches don't.</span></h1>
   <p><span>Paste a job description and drop in a resume. See who qualifies, and the project that proves it.</span><span style="margin-top:.6rem">This demo shows both sides: the company sets skills (step 1), a student applies (step 2), and step 3 shows who qualifies. Submit sends nothing. Runs fully in your browser — free, no account, no API key.</span></p>
 </header>
@@ -259,29 +234,7 @@ body[data-mode="skills"] #allowedWrap{display:none}
     <p class="note">Ranked by score, everyone in one list — a locked row can still outrank an eligible one, on purpose: that's the point being made. Verified counts 100%, claimed 60%, listed only 30%. Skills only needs the minimum score and every starred must-have (at least claimed). Scores support a human decision; they never reject anyone. Code proof reads dependency files and repo languages, not README text. Submit is a demo and sends nothing.</p>
   </section>
 </main>
-<section class="story"><details class="panel"><summary style="cursor:pointer;font-weight:600">How scoring works, and its limits</summary><p style="margin-top:.7rem">Scores come from keyword matching, so a skill pasted into a resume can be gamed. That is why "listed only" counts for just 30%. "Verified" needs both a project and public code, but it is still a signal, not proof of quality.</p><p>Automated ranking of candidates gets regulatory scrutiny in some places. Use these scores to prioritise a human review, never to reject anyone on their own.</p><p>Everything here — the skill matching and the scoring — runs as plain JavaScript in your browser. There's no paid API, no account, and no server involved, so it costs nothing to run and nothing is sent anywhere except a GitHub username, if you choose to add one.</p></details></section>
-
-<section class="story" aria-labelledby="cg-h"><div class="panel">
-  <h2 id="cg-h">Proof, GitHub-style</h2>
-  <p class="tiny" style="margin-top:-.3rem">The same square-grid language as a commit history — here it's showing skill proof and branch eligibility instead of commits.</p>
-  <div class="cg-section">
-    <div>
-      <p class="cg-title" id="cgCalTitle">Skill proof calendar</p>
-      <p class="cg-sub">Every required skill for the top-ranked candidate, lit up by how proven it is.</p>
-      <div id="cgCalendar"></div>
-    </div>
-    <div>
-      <p class="cg-title">Score streaks</p>
-      <p class="cg-sub">Top 5 by score overall, locked or not, counting up live.</p>
-      <div class="cg-streak" id="cgStreaks"></div>
-    </div>
-    <div>
-      <p class="cg-title">Branch × role coverage</p>
-      <p class="cg-sub">Which branches each preset role actually allows in. This is the whole problem, drawn out.</p>
-      <div class="cg-heat" id="cgHeat"></div>
-    </div>
-  </div>
-</div></section>
+<section class="story"><details class="panel"><summary style="cursor:pointer;font-weight:600">How scoring works, and its limits</summary><p style="margin-top:.7rem">Scores come from keyword matching, so a skill pasted into a resume can be gamed. That is why "listed only" counts for just 30%. "Claimed" needs the skill in a line that reads like real use — an action verb (built, deployed, trained…) or a genuinely detailed sentence — not just dropped into a tools list or a one-line "familiar with X" claim, and no single line can back up more than three skills at once, so a buzzword-stuffed bullet doesn't inflate the whole list. "Verified" needs both a project and public code, but it is still a signal, not proof of quality.</p><p>Automated ranking of candidates gets regulatory scrutiny in some places. Use these scores to prioritise a human review, never to reject anyone on their own.</p><p>Everything here — the skill matching and the scoring — runs as plain JavaScript in your browser. There's no paid API, no account, and no server involved, so it costs nothing to run and nothing is sent anywhere except a GitHub username, if you choose to add one.</p></details></section>
 
 <footer class="foot">Made by <span class="who-me">Deepak K</span><span class="spark" aria-hidden="true">✨</span> &middot; <a href="https://github.com/Deepakk-06" target="_blank" rel="noopener noreferrer">GitHub</a></footer>
 
@@ -483,71 +436,9 @@ body[data-mode="skills"] #allowedWrap{display:none}
       });
     }
     first = false;
-    renderProofCalendar(res);
-    renderStreaks(res);
   }
 
   function tierOp(t){ return t==="verified" ? 1 : t==="claimed" ? .62 : t==="listed" ? .32 : .12; }
-
-  function renderProofCalendar(res){
-    var elCal = $("cgCalendar"), elTitle = $("cgCalTitle");
-    var top = res[0];
-    if(!top || !required.length){
-      elCal.innerHTML = '<p class="tiny">Add skills and at least one candidate to see this.</p>';
-      elTitle.textContent = "Skill proof calendar"; return;
-    }
-    elTitle.textContent = "Skill proof calendar — "+top.p.name;
-    var cells = top.items.map(function(x,i){
-      var on = x.t==="verified" || x.t==="claimed";
-      return '<div class="cg-cell'+(on?' on':'')+'" style="--end-op:'+tierOp(x.t)+'; animation-delay:'+(i*55)+'ms" title="'+esc(x.k)+': '+x.t+'"></div>';
-    }).join('');
-    elCal.innerHTML = '<div class="cg-row">'+cells+'</div>'+
-      '<div class="cg-legend">Missing'+
-      ['missing','listed','claimed','verified'].map(function(t){ return '<div class="cg-cell'+((t==="verified"||t==="claimed")?' on':'')+'" style="--end-op:'+tierOp(t)+'"></div>'; }).join('')+
-      'Verified</div>';
-  }
-
-  function animateCount(el, target, ms){
-    var t0 = null;
-    function step(t){
-      if(t0===null) t0=t;
-      var p = Math.min(1, (t-t0)/ms);
-      el.textContent = Math.round(p*target);
-      if(p<1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  function renderStreaks(res){
-    var wrap = $("cgStreaks");
-    var top5 = res.slice(0,5);
-    if(!top5.length){ wrap.innerHTML = '<p class="tiny">Nothing to rank yet.</p>'; return; }
-    var max = Math.max.apply(null, top5.map(function(r){ return r.score; }).concat([1]));
-    wrap.innerHTML = top5.map(function(r,i){
-      return '<div class="cg-srow"><span class="cg-sname">'+esc(r.p.name)+'</span>'+
-        '<span class="cg-sbar"><i data-w="'+(r.score/max*100)+'" data-delay="'+(i*90)+'"></i></span>'+
-        '<span class="cg-sval" data-count="'+r.score+'">0</span></div>';
-    }).join('');
-    wrap.querySelectorAll('.cg-sbar i').forEach(function(bar){
-      setTimeout(function(){ bar.style.width = bar.dataset.w+'%'; }, +bar.dataset.delay);
-    });
-    wrap.querySelectorAll('[data-count]').forEach(function(el){ animateCount(el, +el.dataset.count, 900); });
-  }
-
-  function renderHeatmap(){
-    var wrap = $("cgHeat");
-    var branches = ["CSE","IT","AI&DS","ECE","EEE","ME","CIVIL"];
-    var header = '<div class="hh"></div>'+branches.map(function(b){ return '<div class="hh">'+b+'</div>'; }).join('');
-    var rows = PRESETS.map(function(p,ri){
-      var allowed = p.allowed.split(",").map(nb);
-      var cells = branches.map(function(b,ci){
-        var on = allowed.indexOf(nb(b))>-1;
-        return '<div class="hc'+(on?' on':'')+'" style="animation-delay:'+((ri*7+ci)*28)+'ms" title="'+esc(p.label)+' — '+b+(on?': eligible':': blocked')+'"></div>';
-      }).join('');
-      return '<div class="hr">'+esc(p.label)+'</div>'+cells;
-    }).join('');
-    wrap.innerHTML = header+rows;
-  }
 
   function csvCell(v){ v=String(v==null?"":v); if(/^[=+\-@\t\r]/.test(v)) v="'"+v; return '"'+v.replace(/"/g,'""')+'"'; }
   function exportCsv(){
@@ -634,6 +525,12 @@ body[data-mode="skills"] #allowedWrap{display:none}
     if(/computer science|\bcse\b/i.test(scope)) return "CSE";
     return "UNKNOWN";
   }
+  var ACTION_VERBS = /\b(built|build|develop(?:ed|ing)?|creat(?:ed|ing)|implement(?:ed|ing)?|design(?:ed|ing)?|engineer(?:ed|ing)?|wrote|writing|train(?:ed|ing)?|deploy(?:ed|ing)?|integrat(?:ed|ing)|automat(?:ed|ing)|optimi[sz](?:ed|ing)|debugg(?:ed|ing)|shipp(?:ed|ing)|architect(?:ed|ing)?|prototyp(?:ed|ing)|fine-?tun(?:ed|ing)|led|lead(?:ing)?|solv(?:ed|ing)|contribut(?:ed|ing)|migrat(?:ed|ing)|refactor(?:ed|ing)?)\b/i;
+  var MAX_CLAIMS_PER_LINE = 3;
+  function substantive(line){
+    var t = line.replace(/^[\s•\-\u2022\u00b7*]+/,"").trim();
+    return ACTION_VERBS.test(t) || t.length>=55;
+  }
   function mockCheck(text){
     var lines = text.split(/\r?\n/), inSk=false, isSk=[];
     lines.forEach(function(l,i){
@@ -644,10 +541,30 @@ body[data-mode="skills"] #allowedWrap{display:none}
       var parts=t.replace(/^[^:]{1,40}:\s*/,"").split(/[,|\u2022\u00b7;]/);
       isSk[i] = inSk || (parts.length>=3 && parts.every(function(x){ return x.trim().length<=24; }));
     });
-    var skills = required.map(function(k){
+    // Pass 1: a skill only earns "claimed" from a line that's outside the skills
+    // list AND reads like a real description (an action verb, or genuinely long) —
+    // a bare "familiar with X" or a disguised tools list no longer counts.
+    var claimLine = {};
+    required.forEach(function(k,ki){
+      var re=skillRe(k);
+      for(var i=0;i<lines.length;i++){
+        if(!isSk[i] && re.test(lines[i]) && substantive(lines[i])){ claimLine[ki]=i; break; }
+      }
+    });
+    // Pass 2: cap how many skills a single line can back up. A real project
+    // sentence rarely substantiates more than a few tools at once — beyond
+    // that it reads as a buzzword-stuffed line, not proof, so the rest fall
+    // back to being checked as a plain mention instead.
+    var perLine = {}, claimed = {};
+    Object.keys(claimLine).forEach(function(kiStr){
+      var ki = +kiStr, li = claimLine[kiStr];
+      perLine[li] = (perLine[li]||0) + 1;
+      if(perLine[li] <= MAX_CLAIMS_PER_LINE) claimed[ki] = li;
+    });
+    var skills = required.map(function(k,ki){
       var re=skillRe(k), status="missing", ev="";
-      for(var i=0;i<lines.length;i++){ if(!isSk[i] && re.test(lines[i])){ status="claimed"; ev=lines[i].trim().slice(0,60); break; } }
-      if(status==="missing"){ for(var j=0;j<lines.length;j++){ if(isSk[j] && re.test(lines[j])){ status="listed"; break; } } }
+      if(claimed.hasOwnProperty(ki)){ status="claimed"; ev=lines[claimed[ki]].trim().slice(0,60); }
+      else { for(var j=0;j<lines.length;j++){ if(re.test(lines[j])){ status="listed"; break; } } }
       return {skill:k, status:status, evidence:ev};
     });
     var first = lines.map(function(l){ return l.trim(); }).filter(Boolean)[0] || "";
@@ -818,19 +735,22 @@ body[data-mode="skills"] #allowedWrap{display:none}
     }
   });
 
-  var SKINS = ["paper","ink","pop"];
-  function setSkin(k){
-    if(SKINS.indexOf(k)<0) k="paper";
-    document.documentElement.setAttribute("data-skin",k);
-    Array.prototype.forEach.call(document.querySelectorAll(".skins button"),function(b){ b.setAttribute("aria-pressed", b.dataset.skin===k ? "true":"false"); });
-    try{ localStorage.setItem("bl-skin",k); }catch(e){}
-  }
-  document.querySelector(".skins").addEventListener("click",function(e){ var b=e.target.closest("[data-skin]"); if(b) setSkin(b.dataset.skin); });
-  var savedSkin=null; try{ savedSkin=localStorage.getItem("bl-skin"); }catch(e){}
-  setSkin(savedSkin || (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "ink" : "paper"));
-
   jd.value = PRESETS[0].text; setPreset(0); render();
-  renderHeatmap();
+
+  // --- tilt-on-hover for panels and rows (mouse-driven 3D) ---
+  if(!reduce && window.matchMedia && matchMedia("(hover:hover) and (pointer:fine)").matches){
+    document.addEventListener("mousemove", function(e){
+      var el = e.target.closest(".panel, .row");
+      if(!el) return;
+      var r = el.getBoundingClientRect();
+      var px = (e.clientX - r.left)/r.width - .5, py = (e.clientY - r.top)/r.height - .5;
+      el.style.transform = "perspective(900px) rotateX("+(py*-5)+"deg) rotateY("+(px*6)+"deg) translateZ(6px)";
+    });
+    document.addEventListener("mouseout", function(e){
+      var el = e.target.closest(".panel, .row");
+      if(el && !el.contains(e.relatedTarget)) el.style.transform = "";
+    });
+  }
 })();
 </script>
 </body>
