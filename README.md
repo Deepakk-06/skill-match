@@ -1,7 +1,3 @@
-OWNER="Deepakk-06"
-REPO="branchless"
-cd ~/Desktop && rm -rf bl-edit
-if ! git clone -q https://github.com/$OWNER/$REPO.git bl-edit; then
   echo "STOP: could not clone https://github.com/$OWNER/$REPO, check the owner and repo name"
 else
 cd bl-edit
@@ -113,11 +109,3 @@ It works. That's all I'm saying.
 **Branchless: because your branch is only one line on your resume.**
 
 </div>
-EOF
-echo "--- files in repo ---"; ls
-git add README.md
-if git diff --cached --quiet; then echo "NOTHING TO CHANGE"
-else git commit -qm "Rewrite README with diagrams and badges" && git push -q origin main && echo "DONE: README pushed"
-fi
-cd ~/Desktop && rm -rf bl-edit
-fi
